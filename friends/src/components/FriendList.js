@@ -7,7 +7,10 @@ import FriendForm from './FriendForm';
 
 class FriendList extends React.Component {
   state = {
-    friends: []
+    friends: [ {id: '',
+      name: '',
+      age: '',
+      email: '' } ]
   };
 
   componentDidMount() {
@@ -27,25 +30,41 @@ class FriendList extends React.Component {
 
   addFriend = friend => {
     axiosWithAuth()
-      .post('friends', friend)
+      .post('/friends', friend)
       .then(res => {
         this.getData();
       })
       .catch(err => {
           console.log(err);
       });
-}
+  }
 
-render(){
-    return(
-        <div>
-            <FriendForm addFriend={this.addFriend} />
-            {this.state.friends.map(friend => {
-                return <Friends key={friend.id} friend={friend}/>
-            })}
-        </div>
-    );
-}
+  removeFriend = () => {
+    const id = this.state.friends.id
+    axiosWithAuth()
+      .delete(`/friends/${id}`)
+      .then(res => {
+        console.log(res)
+        this.getData();
+      })
+      .catch(err => {
+          console.log(err);
+      });
+  }
+  
+
+  render(){
+      return(
+          <div>
+              <FriendForm addFriend={this.addFriend} />
+              <div className="list">
+                {this.state.friends.map(friend => {
+                    return <Friends key={friend.id} friend={friend} removeFriend={this.removeFriend}/>
+                })}
+              </div>
+          </div>
+      );
+  }
 }
 
 export default FriendList;

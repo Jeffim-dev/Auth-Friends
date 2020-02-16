@@ -21,16 +21,15 @@ class Login extends React.Component {
   };
 
   login = e => {
-    e.preventDefault();
     this.setState({
       credentials: {
         isLoading: true
       }
     });
+    e.preventDefault();
     axios
       .post("http://localhost:5000/api/login", this.state.credentials)
       .then(res => {
-        console.log(res);
         localStorage.setItem("token", res.data.payload);
         this.props.history.push("/protected");
         this.setState({
@@ -57,8 +56,11 @@ class Login extends React.Component {
             name="password"
             value={this.state.credentials.password}
             onChange={this.handleChange}
-          />   
-           <button type='submit'> {this.state.credentials.isLoading && <Loader type="Puff" color="#204963" height={60} width={60} timeout={3000} />}
+          /> 
+          
+          <button type='submit'>
+          {this.state.credentials.isLoading && 
+           <Loader type="Puff" color="#204963" height={60} width={60} timeout={3000} />}  
              Log in
           </button>
            
